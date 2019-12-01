@@ -7,6 +7,7 @@ import 'package:magnumdingus/reddit_scraper.dart';
 import 'package:magnumdingus/sidebar.dart';
 import 'package:magnumdingus/form.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:magnumdingus/browser.dart';
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
@@ -33,13 +34,14 @@ class _HomeState extends State<HomeApp>{
 
     RandomWords(),
     HomePage(),
+    WebViewExample(),
   ];
 
   void onTabTapped(int index) {
-    if(index == 3){
+/*     if(index == 3){
       index = 0;
       _launchURL("http://bitly.com/98K8eH");
-    };
+    }; */
    setState(() {
      _currentIndex = index;
    });
