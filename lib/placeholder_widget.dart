@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-
+/* import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+ */
 
 class PlaceHolderWidget extends StatelessWidget{
   final Color color;
@@ -49,7 +49,8 @@ _launchURL() async {
 }
 
 // embedded browser
-
+// This works, but is overpowering the bottom navigation bar. TODO
+/* 
 class WebViewExample extends StatefulWidget {
   @override
   _WebViewExampleState createState() => _WebViewExampleState();
@@ -83,4 +84,4 @@ class _WebViewExampleState extends State<WebViewExample> {
       withZoom: false,
     );
   }
-}
+} */

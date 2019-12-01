@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:magnumdingus/homepage.dart';
 import 'package:magnumdingus/placeholder_widget.dart';
 import 'package:magnumdingus/ListView.dart';
-import 'package:magnumdingus/json_parser.dart';
+import 'package:magnumdingus/reddit_scraper.dart';
 import 'package:magnumdingus/sidebar.dart';
+import 'package:magnumdingus/form.dart';
 
 class HomeApp extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _HomeState extends State<HomeApp>{
 
     RandomWords(),
     HomePage(),
+    QueryForm(),
   ];
 
   void onTabTapped(int index) {
@@ -60,6 +62,10 @@ class _HomeState extends State<HomeApp>{
             icon: Icon(Icons.settings),
             title: Text("Testing")
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            title: Text("Testing2")
+          ),          
           
         ],
       ),

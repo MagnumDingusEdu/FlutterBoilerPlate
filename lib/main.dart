@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         accentColor: Colors.redAccent,
-        brightness: Brightness.dark
+        brightness: Brightness.dark,
       ),
       title: "Flutter Boiler Plate",
       home: HomeApp(),
