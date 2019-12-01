@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:magnumdingus/homepage.dart';
+import 'package:magnumdingus/material_basic.dart';
 import 'package:magnumdingus/placeholder_widget.dart';
 import 'package:magnumdingus/ListView.dart';
 import 'package:magnumdingus/reddit_scraper.dart';
 import 'package:magnumdingus/sidebar.dart';
 import 'package:magnumdingus/form.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 
 class HomeApp extends StatefulWidget {
   @override
@@ -17,16 +28,18 @@ class HomeApp extends StatefulWidget {
 class _HomeState extends State<HomeApp>{
   int _currentIndex = 0;
   final List<Widget> _children = [
-        SideBar(),
 
     RedditScraperHome(),
 
     RandomWords(),
     HomePage(),
-    QueryForm(),
   ];
 
   void onTabTapped(int index) {
+    if(index == 3){
+      index = 0;
+      _launchURL("http://bitly.com/98K8eH");
+    };
    setState(() {
      _currentIndex = index;
    });
@@ -48,24 +61,22 @@ class _HomeState extends State<HomeApp>{
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text("HomePage")
+            title: Text("RedditBrowser")
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text("List Generator")
+            title: Text("Favorites")
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.brush),
             title: Text("Paint")
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text("Testing")
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text("Testing2")
+            icon: Icon(Icons.cloud),
+            title: Text("Cloud")
           ),          
+
+         
           
         ],
       ),

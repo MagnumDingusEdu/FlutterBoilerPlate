@@ -41,7 +41,7 @@ class RandomWordsGenerator extends State<RandomWords> {
       subtitle: Text("This is list item " + (index + 1).toString()),
       isThreeLine: true,
       leading: Image(
-        image: NetworkImage("https://i.imgur.com/LfV8TBp.jpg"),
+        image: AssetImage("assets/profile_pic.jpg"),
         fit: BoxFit.contain,
       ),
       trailing: Icon(

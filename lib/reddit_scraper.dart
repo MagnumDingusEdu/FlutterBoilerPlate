@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'package:magnumdingus/loader.dart';
 
 var brightness = Brightness.dark;
 
@@ -15,7 +16,6 @@ class RedditScraper extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
         brightness: brightness,
-
       ),
       home: new RedditScraperHome(),
     );
@@ -50,21 +50,29 @@ class _RedditScraperHomeState extends State<RedditScraperHome> {
     return post_list;
   }
 
-  void _onRefreshTapped(String subreddit , String time, int limit) {
+  void _onRefreshTapped(String subreddit, String time, int limit) {
     setState(() {
       print("Refereshed");
-      String query = "?"+"sr="+subreddit+"&"+"limit="+limit.toString()+"&"+"time="+time;
-      url = "http://magnum.wtf/reddit"+query;
+      String query = "?" +
+          "sr=" +
+          subreddit +
+          "&" +
+          "limit=" +
+          limit.toString() +
+          "&" +
+          "time=" +
+          time;
+      url = "http://magnum.wtf/reddit" + query;
       print(url);
     });
   }
-  
-  void _colorThemeChange(){
+
+  void _colorThemeChange() {
     setState(() {
-      if(brightness == Brightness.dark){
+      if (brightness == Brightness.dark) {
         brightness = Brightness.light;
-      }else
-      brightness = Brightness.dark;
+      } else
+        brightness = Brightness.dark;
     });
   }
 
@@ -81,6 +89,7 @@ class _RedditScraperHomeState extends State<RedditScraperHome> {
       _onRefreshTapped(_data.subreddit, _data.timeLimit, _data.queryLimit);
     }
   }
+
   String _validateSubreddit(String value) {
     if (value.length > 24) {
       return 'The subreddit must be less than 24 characters';
@@ -88,145 +97,144 @@ class _RedditScraperHomeState extends State<RedditScraperHome> {
 
     return null;
   }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Reddit Browser"),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.compare_arrows),
-        onPressed: _colorThemeChange,
-      ),
-      drawer: new Drawer(
-        child: Padding(
-        padding: EdgeInsets.all(0.0),
-        child: new Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              new UserAccountsDrawerHeader(
-              currentAccountPicture: new GestureDetector(
-                child: new CircleAvatar(
-                  backgroundImage: new NetworkImage("https://i.imgur.com/LfV8TBp.jpg"),
-                ),
-                onTap: () => print("This is the current user"),
-              ),
-              accountName: new Text("u/ThaparDong"),
-              accountEmail: new Text("Reddit scraper, powered by magnum.wtf"),
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  fit: BoxFit.fill,
-                 image: new NetworkImage("https://i.imgur.com/h60KTcC.jpg"),
+    return new MaterialApp(
+        title: "EnigmaBoilerPlate",
+        theme: new ThemeData(
+          brightness: brightness,
+          accentColor: Colors.redAccent,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: new AppBar(
+            title: new Text("Reddit Browser"),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.compare_arrows),
+            onPressed: _colorThemeChange,
+          ),
+          drawer: new Drawer(
+            child: Padding(
+              padding: EdgeInsets.all(0.0),
+              child: new Form(
+                key: _formKey,
+                child: ListView(
+                  children: <Widget>[
+                    new UserAccountsDrawerHeader(
+                      currentAccountPicture: new GestureDetector(
+                        child: new CircleAvatar(
+                          backgroundImage: AssetImage("assets/profile_pic.jpg"),
+                        ),
+                        onTap: () => print("This is the current user"),
+                      ),
+                      accountName: new Text("u/ThaparDong"),
+                      accountEmail:
+                          new Text("Reddit scraper, powered by magnum.wtf"),
+                      decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/profile_background.jpg")
+                        ),
+                      ),
+                    ),
+                    new Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: TextFormField(
+                          keyboardType: TextInputType.url,
+                          decoration: new InputDecoration(
+                            hintText: "Enter subreddit name without r/",
+                            labelText: 'Subreddit',
+                            labelStyle: TextStyle(fontSize: 15),
+                          ),
+                          validator: this._validateSubreddit,
+                          onSaved: (String value) {
+                            this._data.subreddit = value;
+                          },
+                        )),
+                    new Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: TextFormField(
+                          keyboardType: TextInputType.url,
+                          decoration: new InputDecoration(
+                            hintText: "hour/day/week/month/year/all",
+                            labelText: 'Time',
+                            labelStyle: TextStyle(fontSize: 15),
+                          ),
+                          validator: this._validateSubreddit,
+                          onSaved: (String value) {
+                            this._data.timeLimit = value;
+                          },
+                        )),
+                    new Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ],
+                          decoration: new InputDecoration(
+                              hintText:
+                                  "Enter the number of top posts to scrape",
+                              labelText: "Scraping Limit",
+                              labelStyle: TextStyle(fontSize: 15)),
+                          onSaved: (String value) {
+                            this._data.queryLimit = int.parse(value);
+                          },
+                        )),
+                    new Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Container(
+                          width: 60.0,
+                          child: new RaisedButton(
+                            child: new Text(
+                              'Scrape',
+                              style: new TextStyle(color: Colors.white),
+                            ),
+                            onPressed: this.submit,
+                            color: Colors.blue,
+                          ),
+                          margin: new EdgeInsets.only(top: 20.0),
+                        )),
+                  ],
                 ),
               ),
             ),
-              new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                keyboardType: TextInputType.url,
-                decoration: new InputDecoration(
-                  hintText: "Enter subreddit name without r/",
-                  labelText: 'Subreddit',
-                  labelStyle: TextStyle(fontSize: 15),
-                ),
-                validator: this._validateSubreddit,
-                onSaved: (String value){
-                  this._data.subreddit = value;
-                },
-
-              )),
-              new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: TextFormField(
-                keyboardType: TextInputType.url,
-                decoration: new InputDecoration(
-                  hintText: "hour/day/week/month/year/all",
-                  labelText: 'Time',
-                  labelStyle: TextStyle(fontSize: 15),
-                ),
-                validator: this._validateSubreddit,
-                onSaved: (String value){
-                  this._data.timeLimit = value;
-                },
-
-              )
-              ),              
-              new Padding(
-                padding: EdgeInsets.symmetric(horizontal:20.0),
-                child: TextFormField(
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
-                decoration: new InputDecoration(
-                  hintText: "Enter the number of top posts to scrape",
-                  labelText: "Scraping Limit",
-                  labelStyle: TextStyle(fontSize: 15)
-                ),
-                onSaved: (String value){
-                  this._data.queryLimit = int.parse(value);
-                },
-              
-              )
-              ),
-              new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Container(
-                width: 60.0,
-                child: new RaisedButton(
-                  child: new Text(
-                    'Scrape',
-                    style: new TextStyle(
-                      color: Colors.white
-                    ),
-                  ),
-                  onPressed: this.submit,
-                  color: Colors.blue,
-                ),
-                margin: new EdgeInsets.only(
-                  top: 20.0
-                ),
-              )
-              ),
-
-            ],
           ),
-        ),
-      ),
-      ),
-
-      body: Container(
-        child: FutureBuilder(
-          future: _getUsers(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.data == null) {
-              return Container(child: Center(child: Text("Loading...")));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                      child: ListTile(
-                    leading: Image(
-                      image: NetworkImage(snapshot.data[index].thumbnail),
-                      fit: BoxFit.contain,
-                    ),
-                    title: Text(snapshot.data[index].title),
-                    subtitle: Text(snapshot.data[index].author),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPage(snapshot.data[index])));
+          body: Container(
+            child: FutureBuilder(
+              future: _getUsers(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return Center(child: ColorLoader3(),);
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                          child: ListTile(
+                        leading: Image(
+                          image: NetworkImage(snapshot.data[index].thumbnail),
+                          fit: BoxFit.contain,
+                        ),
+                        title: Text(snapshot.data[index].title),
+                        subtitle: Text(snapshot.data[index].author),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailPage(snapshot.data[index])));
+                        },
+                      ));
                     },
-                  ));
-                },
-              );
-            }
-          },
-        ),
-      ),
-    );
+                  );
+                }
+              },
+            ),
+          ),
+        ));
   }
 }
 
@@ -240,7 +248,6 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(posts.title),
-          
         ),
         body: Container(
           child: Center(
@@ -254,13 +261,13 @@ class DetailPage extends StatelessWidget {
                   height: 20,
                 ),
                 new Expanded(
-                  flex: 1,
+                    flex: 1,
                     child: SingleChildScrollView(
-                  child: Text(
-                    posts.selftext,
-                    style: TextStyle(fontSize: 15),
-                  ),
-                )),
+                      child: Text(
+                        posts.selftext,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
                 RaisedButton(
                   child: Text("Click here to go to the Reddit post"),
                   onPressed: () => _launchURL(posts.url),
