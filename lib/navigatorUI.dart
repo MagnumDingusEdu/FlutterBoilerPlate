@@ -3,6 +3,7 @@ import 'package:magnumdingus/homepage.dart';
 import 'package:magnumdingus/placeholder_widget.dart';
 import 'package:magnumdingus/ListView.dart';
 import 'package:magnumdingus/json_parser.dart';
+import 'package:magnumdingus/sidebar.dart';
 
 class HomeApp extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class HomeApp extends StatefulWidget {
 class _HomeState extends State<HomeApp>{
   int _currentIndex = 0;
   final List<Widget> _children = [
+        SideBar(),
+
     RedditScraperHome(),
 
     RandomWords(),
@@ -52,6 +55,10 @@ class _HomeState extends State<HomeApp>{
           BottomNavigationBarItem(
             icon: Icon(Icons.brush),
             title: Text("Paint")
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            title: Text("Testing")
           ),
           
         ],
